@@ -106,5 +106,6 @@ nbdist/
 /web/css/
 /web/js/
 
+.env
 
 

@@ -1,0 +1,5 @@
+@import "bootstrap.min.css";
+
+#delete-form {
+    display: inline;
+}

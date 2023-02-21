@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Home page{% endblock %}
+
+{% block body %}
+ 
+<main>
+    <div class="container py-4">
+        <header class="pb-3 mb-4 border-bottom">
+            <a href="/" class="d-flex align-items-center text-dark text-decoration-none">
+                <span class="fs-4">Employees List</span>
+            </a>
+        </header>
+        
+    <a href="/employee/new" class="btn btn-primary">Add Employee</a>
+    
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">First Name</th>
+                <th scope="col">Last Name</th>
+                <th scope="col">Email</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for employee in employees %}
+            <tr>
+                <th scope="row">{{ employee.id }}</th>
+                <td>{{ employee.firstName }}</td>
+                <td>{{ employee.lastName }}</td>
+                <td>{{ employee.email }}</td>
+                <td>
+                    <a href="/employee/edit/?id={{ employee.id }}" class="btn btn-primary">Update</a>
+                    <a href="/employee/?id={{ employee.id }}" class="btn btn-danger">Delete</button>
+                </td>
+            </tr>
+            {% endfor %}    
+        </tbody>
+    </table>
+       
+    <footer class="pt-3 mt-4 text-muted border-top">
+      &copy; {{ year }}
+    </footer>
+    </div>
+</main>
+{% endblock %}
+

@@ -5,10 +5,9 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Service\Employee\Impl\EmployeeServiceImpl;
-use App\Repository\Employee\EmployeeRepository;
+use App\Service\EmployeeService;
 use App\Entity\Employee;
 use App\Form\Employee\EmployeeType;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -18,23 +17,14 @@ class EmployeeController extends AbstractController
     /**
      * @var EmployeeService
      */
-    private $employeeService;
-    /**
-     * @var EmployeeRepository
-     */
-    private $employeeRepository;
+    private EmployeeServiceImpl $employeeService;
 
     /**
      * WishlistController constructor.
      * @param EmployeeService $employeeService
-     * @param EmployeeRepository $employeeRepository
      */
-    public function __construct(
-        EmployeeServiceImpl $employeeService, 
-        EmployeeRepository $employeeRepository
-    ) {
+    public function __construct(EmployeeServiceImpl $employeeService) {
         $this->employeeService = $employeeService;
-        $this->employeeRepository = $employeeRepository;
     }
     
     /**
@@ -53,20 +43,15 @@ class EmployeeController extends AbstractController
     /**
      * @Route("/new", name="employee_new")
      */
-    public function addEmployeeForm( 
-        Request $request, 
-        EntityManagerInterface $entityManager,
-    ): Response {
-        
+    public function addEmployeeForm(Request $request): Response 
+    {
         $employee = new Employee();
         $form = $this->createForm(EmployeeType::class, $employee);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($employee);
-            $entityManager->flush();
+        $isSubmited = $this->employeeService
+            ->addEmployeeForm($request, $form, $employee);
+        
+        if ($isSubmited) {
             $this->addFlash('success', 'Success! Employee added.');
-
             return $this->redirectToRoute('employee');
         }
 
@@ -77,16 +62,14 @@ class EmployeeController extends AbstractController
     }
     
     #[Route('/{id<\d+>}/edit', name: 'employee_edit', methods: ['GET', 'POST'])]
-    public function edit(
-        Request $request,
-        Employee $employee,
-        EntityManagerInterface $entityManager
-    ): Response {
+    public function edit(Request $request, Employee $employee): Response 
+    {
         $form = $this->createForm(EmployeeType::class, $employee);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
+        
+        $isSubmited = $this->employeeService
+            ->updateEmployeeForm($request, $form, $employee);
+       
+        if ($isSubmited) {
             $this->addFlash('success', 'Updated successfully.');
 
             return $this->redirectToRoute(
@@ -102,11 +85,8 @@ class EmployeeController extends AbstractController
     }
     
     #[Route('/{id}/delete', name: 'employee_delete', methods: ['POST'])]
-    public function delete(
-        Request $request,
-        Employee $employee,
-        EntityManagerInterface $entityManager
-    ): Response {
+    public function delete(Request $request, Employee $employee): Response 
+    {
         /** @var string|null $token */
         $token = $request->request->get('token');
 
@@ -114,8 +94,7 @@ class EmployeeController extends AbstractController
             return $this->redirectToRoute('employee');
         }
 
-        $entityManager->remove($employee);
-        $entityManager->flush();
+        $this->employeeService->deleteEmployeeForm($employee);
 
         $this->addFlash('success', 'Deleted successfully.');
 

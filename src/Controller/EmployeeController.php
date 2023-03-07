@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 class EmployeeController extends AbstractController
 {
     /**
-     * @var EmployeeService
+     * @var EmployeeService $employeeService
      */
     private EmployeeServiceImpl $employeeService;
 

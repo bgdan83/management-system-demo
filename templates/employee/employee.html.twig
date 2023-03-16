@@ -32,7 +32,7 @@
                     <td>{{ employee.lastName }}</td>
                     <td>{{ employee.email }}</td>
                     <td>
-                        <a href="{{ path('employee_edit', {id: employee.id}) }}" class="btn btn-primary">Update</a>
+                        <a href="{{ path('employee_edit_get', {id: employee.id}) }}" class="btn btn-primary">Update</a>
                         {{ include('employee/delete_form.html.twig', {employee: employee}, with_context = false) }}
                     </td>
                 </tr>

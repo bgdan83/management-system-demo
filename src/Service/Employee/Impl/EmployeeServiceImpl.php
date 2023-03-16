@@ -4,7 +4,6 @@ namespace App\Service\Employee\Impl;
 
 use App\Repository\Employee\EmployeeRepository;
 use App\Service\Employee\EmployeeService;
-use Symfony\Component\HttpFoundation\Request;
 use App\Entity\Employee;
 
 /** 
@@ -40,60 +39,32 @@ class EmployeeServiceImpl implements EmployeeService
     /** 
      *  Метод добавляет сотрудника
      * 
-     *  @param Request $request
-     *  @param $form
      *  @param Employee $employee
-     *  @return bool
+     *  @return void
      */
-    public function addEmployeeForm( 
-        Request $request,
-        $form,
-        Employee $employee
-    ): bool {
-        
-        $result = false;
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->employeeRepository->add($employee);
-   
-            $result = true;
-        }
-        
-        return $result;
+    public function addEmployee($employee): void
+    {
+        $this->employeeRepository->add($employee);
     }
     
     /** 
      *  Метод обновляет данные сотрудника
      * 
-     *  @param Request $request
-     *  @param $form
      *  @param Employee $employee
-     *  @return bool
+     *  @return void
      */
-    public function updateEmployeeForm( 
-        Request $request,
-        $form,
-        Employee $employee
-    ): bool {
-        
-        $result = false;
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->employeeRepository->update($employee);
-   
-            $result = true;
-        }
-        
-        return $result;
+    public function updateEmployee(Employee $employee): void
+    {
+        $this->employeeRepository->update($employee);
     }
     
     /** 
      *  Метод удаляет сотрудника
      * 
+     *  @param Employee $employee
+     *  @return void
      */
-    public function deleteEmployeeForm(Employee $employee) 
+    public function deleteEmployee(Employee $employee): void
     {
         $this->employeeRepository->delete($employee);
     }

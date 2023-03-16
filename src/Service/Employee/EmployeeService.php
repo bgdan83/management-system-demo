@@ -2,7 +2,7 @@
 
 namespace App\Service\Employee;
 use App\Entity\Employee;
-use Symfony\Component\HttpFoundation\Request;
+
 
 /** 
  * Интерфейс работы с сотрудниками
@@ -20,27 +20,23 @@ interface EmployeeService {
     /** 
      *  Метод добавляет сотрудника
      * 
-     *  @param Request $request
-     *  @param $form
      *  @param Employee $employee
-     *  @return bool
+     *  @return void
      */
-    function addEmployeeForm(Request $request, $form, Employee $employee);
+    function addEmployee(Employee $employee): void;
     
     /** 
      *  Метод обновляет данные сотрудника
      * 
-     *  @param Request $request
-     *  @param $form
      *  @param Employee $employee
-     *  @return bool
+     *  @return void
      */
-    function updateEmployeeForm(Request $request, $form, Employee $employee);
+    function updateEmployee(Employee $employee): void;
     
     /** 
      *  Метод удаляет сотрудника
-     * 
+     *  @return void
      */
-    function deleteEmployeeForm(Employee $employee);
+    function deleteEmployee(Employee $employee): void;
 
 }
